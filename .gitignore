@@ -1,0 +1,6 @@
+__pycache__/
+build/
+dist/
+*.spec
+pz_books_progress.json
+Src/emoji_cache/
