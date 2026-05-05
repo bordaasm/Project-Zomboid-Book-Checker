@@ -329,7 +329,7 @@ SKILL_RU = {
     "Knapping": "Обтесывание камня",
     "Long Blade": "Длинные клинки",
     "Maintenance": "Прочность",
-    "Masonry": "Каменьщик",
+    "Masonry": "Каменщик",
     "Mechanics": "Автомеханика",
     "Pottery": "Гончарное дело",
     "Reloading": "Перезарядка",
