@@ -103,6 +103,7 @@ TEXT = {
         "volume": "Том {volume}",
         "volumes": "{count}/5 томов",
         "volumes_complete": "Все тома собраны",
+        "complete_badge": "ГОТОВО",
     },
     "en": {
         "all_skills": "All topics",
@@ -125,6 +126,7 @@ TEXT = {
         "volume": "Vol. {volume}",
         "volumes": "{count}/5 volumes",
         "volumes_complete": "All volumes collected",
+        "complete_badge": "COMPLETE",
     },
 }
 
@@ -991,7 +993,7 @@ class BookCheckerApp(tk.Tk):
         accent = SKILL_COLORS[skill]
         card_bg = self.skill_card_bg(skill, complete)
         border = self.skill_border(skill, complete)
-        card = tk.Frame(self.cards_frame, bg=border, padx=1, pady=1)
+        card = tk.Frame(self.cards_frame, bg=border, padx=2 if complete else 1, pady=2 if complete else 1)
 
         inner = tk.Frame(card, bg=card_bg, padx=12, pady=12)
         inner.pack(fill=tk.BOTH, expand=True)
@@ -1020,6 +1022,18 @@ class BookCheckerApp(tk.Tk):
         if emoji_image is not None:
             emoji_label.configure(image=emoji_image)
             emoji_label.pack(side=tk.RIGHT, padx=(8, 0))
+
+        complete_badge = tk.Label(
+            title_row,
+            text=self.t("complete_badge"),
+            bg=palette["found_bg"],
+            fg=palette["found_fg"],
+            font=("Segoe UI", 8, "bold"),
+            padx=8,
+            pady=2,
+        )
+        if complete:
+            complete_badge.pack(side=tk.RIGHT, padx=(8, 0), before=emoji_label)
 
         subtitle_text = (
             self.t("volumes_complete") if complete else self.t("volumes", count=self.skill_found_count(skill))
@@ -1066,6 +1080,7 @@ class BookCheckerApp(tk.Tk):
             "title_row": title_row,
             "emoji_label": emoji_label,
             "image_label": image_label,
+            "complete_badge": complete_badge,
             "title": title,
             "subtitle": subtitle,
             "buttons": buttons,
@@ -1106,6 +1121,7 @@ class BookCheckerApp(tk.Tk):
         )
 
         widgets["card"].configure(bg=border)
+        widgets["card"].configure(padx=2 if complete else 1, pady=2 if complete else 1)
         widgets["inner"].configure(bg=card_bg)
         widgets["title_row"].configure(bg=card_bg)
         widgets["emoji_label"].configure(bg=card_bg)
@@ -1117,6 +1133,14 @@ class BookCheckerApp(tk.Tk):
             bg=card_bg,
             fg=palette["muted_complete"] if complete else palette["muted"],
         )
+        widgets["complete_badge"].configure(
+            text=self.t("complete_badge"),
+            bg=palette["found_bg"],
+            fg=palette["found_fg"],
+        )
+        widgets["complete_badge"].pack_forget()
+        if complete:
+            widgets["complete_badge"].pack(side=tk.RIGHT, padx=(8, 0), before=widgets["emoji_label"])
         widgets["buttons"].configure(bg=card_bg)
 
         for book in self.books_for_skill(skill):
